@@ -17,5 +17,10 @@
 */
 -->
 <words>
-
+    <word src="cu">ĉu</word>
+    <word src="au">aŭ</word>
+    <word src="hodiau">hodiaŭ</word>
+    <word src="hierau">hieraŭ</word>
+    <word src="morgau">morgaŭ</word>
+    <word src="ruga">ruĝa</word>
 </words>

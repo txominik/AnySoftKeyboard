@@ -4,7 +4,7 @@
         autoTextResourceId="@xml/esperanto_autotext"
         description="@string/esperanto_dictionary_description"
         dictionaryResourceId="@array/esperanto_words_dict_array"
-        id=""
+        id="5aedf0b5-d3e5-4e80-97ec-4cf46bc33267"
         initialSuggestions="@array/esperanto_initial_suggestions"
         locale="eo"
         nameResId="@string/esperanto_dictionary"
