@@ -1,4 +1,4 @@
-ext.status_icon_text = "en"
+ext.status_icon_text = "eo"
 
 ext.dictionaryInputPossibleCharacters = null//"".toCharArray()
 ext.dictionaryInputAdditionalInnerCharacters = null//"".toCharArray()

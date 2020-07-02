@@ -1,0 +1,7 @@
+<resources>
+    <string name="esperanto_dictionary_description">Esperanta vortlisto elprenita de Tekstaro, Komputeko, OpenOficce kaj esperanta vikipedio.</string>
+    <string name="eo_qwerty_description">QWERTY stila esperanta klavaro-aranĝo, AOSP tipa.</string>
+    <string name="eo_qwertz_description">QWERTZ stila esperanta klavaro-aranĝo.</string>
+    <string name="eo_dvorak_description">Dvorak stila esperanta klavaro-aranĝo.</string>
+    <string name="eo_azerty_description">AZERTY stila esperanta klavaro-aranĝo.</string>
+</resources>

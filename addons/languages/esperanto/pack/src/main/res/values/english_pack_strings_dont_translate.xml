@@ -3,20 +3,14 @@
            xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
            tools:ignore="MissingTranslation,TypographyDashes">
 
-    <string name="english_dictionary">English</string>
-    <string name="english_keyboard">English</string>
-    <string name="english_keyboard_symbols">English</string>
-    <string name="dvorak_keyboard">Dvorak</string>
-    <string name="compact_keyboard">EN Compact</string>
-    <string name="compact_dvorak_keyboard">Dv Compact</string>
-    <string name="compact_keyboard_16keys">EN Keypad</string>
-    <string name="terminal_keyboard">Terminal</string>
-    <string name="colemak_keyboard">Colemak</string>
-    <string name="workman_keyboard">Workman</string>
-    <string name="halmak_keyboard">Halmak</string>
-    <string name="main_english_keyboard_id">c7535083-4fe6-49dc-81aa-c5438a1a343a</string>
+    <string name="esperanto_dictionary">Esperanto</string>
+    <string name="eo_qwerty_keyboard">Eo QWERTY</string>
+    <string name="eo_qwertz_keyboard">Eo QWERTZ</string>
+    <string name="eo_dvorak_keyboard">Eo Dvorak</string>
+    <string name="eo_azerty_keyboard">Eo AZERTY</string>
+    <string name="main_esperanto_keyboard_id"></string><!-- Ni ankoraŭ devas ŝanĝi la identigilon -->
 
-    <string-array name="english_initial_suggestions">
+    <string-array name="esperanto_initial_suggestions">
         <item>!</item>
         <item>\?</item>
         <item>,</item>
