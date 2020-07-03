@@ -18,7 +18,7 @@
         <Key android:codes="349" android:keyLabel="ŝ"/>
         <Key android:codes="112" android:keyLabel="p" android:popupCharacters="þ"/>
         <Key android:codes="285" android:keyLabel="ĝ" android:popupCharacters="yý"/>
-        <Key android:codes="102" android:keyLabel="f"/>
+        <Key android:codes="102" android:keyLabel="f" android:popupCharacters="\u200b"/> <!-- Tiu signo (\u200b) estas nula-larĝeca spaco, nomita de ni "falsa spaco": https://en.wikipedia.org/wiki/Zero-width_space -->
         <Key android:codes="103" android:keyLabel="g" android:popupCharacters="ğ"/>
         <Key android:codes="99" android:keyLabel="c" android:popupCharacters="ç"/>
         <Key android:codes="114" android:keyLabel="r"/>
