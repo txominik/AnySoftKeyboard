@@ -8,6 +8,7 @@
     <string name="eo_qwertz_keyboard">Eo QWERTZ</string>
     <string name="eo_dvorak_keyboard">Eo Dvorak</string>
     <string name="eo_azerty_keyboard">Eo AZERTY</string>
+    <string name="eo_bepo_keyboard">Eo BÉPO</string>
     <string name="main_esperanto_keyboard_id">a6403c87-ae4f-43c7-82e6-def86cf300de</string>
 
     <string-array name="esperanto_initial_suggestions">

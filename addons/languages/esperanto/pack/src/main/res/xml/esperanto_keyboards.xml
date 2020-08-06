@@ -33,5 +33,14 @@
               description="@string/eo_azerty_description"
               index="4"
               physicalKeyboardMappingResId="@xml/esperanto_physical" />
+    <Keyboard nameResId="@string/eo_bepo_keyboard"
+              iconResId="@drawable/ic_status_eo"
+              layoutResId="@xml/eo_bepo"
+              id="a8161c96-9b97-46c0-b8b1-8b2e91359e72"
+              defaultDictionaryLocale="eo"
+              description="@string/eo_bepo_description"
+              index="5"
+              physicalKeyboardMappingResId="@xml/esperanto_physical" />
+
 
 </Keyboards>

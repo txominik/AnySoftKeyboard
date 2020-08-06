@@ -4,4 +4,5 @@
     <string name="eo_qwertz_description">QWERTZ stila esperanta klavaro-aranĝo.</string>
     <string name="eo_dvorak_description">Dvorak stila esperanta klavaro-aranĝo.</string>
     <string name="eo_azerty_description">AZERTY stila esperanta klavaro-aranĝo.</string>
+    <string name="eo_bepo_description">BÉPO stila esperanta klavaro-aranĝo.</string>
 </resources>
