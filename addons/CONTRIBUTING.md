@@ -19,7 +19,11 @@ include ":addons:languages:klingon:pack", ":addons:languages:klingon:apk"
 1. Replace the dictionary files under `klingon/pack/dictionary` with inputs matching your language (and remove what's not relevant):
     * Try to locate AOSP dictionary files (could be found at [AOSP](https://android.googlesource.com/platform/packages/inputmethods/LatinIME/+/master/dictionaries/), or [LineageOS](https://github.com/LineageOS/android_packages_inputmethods_LatinIME/tree/lineage-16.0/dictionaries)) (you should use the `XX_wordlist.combined.gz` file).
     * If you have anything that was pre-built into a word-list XML, put those under `klingon/pack/dictionary/prebuilt`.
-    * Add text files that will be parsed - word-counted -  to generate word-list XMLs
+    * You can add `.txt` or `.html` files to be parsed - word-counted -  to generate word-list XMLs by putting them under `klingon/pack/dictionary/inputs` and modify the following lines of`addons/languages/klingon/pack/build.gradle` to include all characters expected to be found and parsed:
+```
+ext.dictionaryInputPossibleCharacters = "ABDCĈEFGĜHĤIJĴKLNMOPRSŜTUŬVZabdcĉefgĝhĥijĵklnmoprsŝtuŭvz".toCharArray()
+ext.dictionaryInputAdditionalInnerCharacters = "ÀàÂâÇçÉéÈèÊêËëÎîÏïÔôÙùÛûÜüŸÿÄÖÜẞäöüßñÑ".toCharArray()
+```
 1. Generate the dictionary: `./gradlew :addons:languages:klingon:pack:makeDictionary`. This will create the following files (which _should not_ checked into the repo):
     * raw resources under `klingon/pack/src/main/res/raw/klingon_words_?.dict`
     * IDs resource array under `klingon/pack/src/main/res/values/klingon_words_dict_array.xml`
@@ -42,12 +46,17 @@ include ":addons:languages:klingon:pack", ":addons:languages:klingon:apk"
     * Set the locale value at `defaultDictionaryLocale` to match the value you used in `klingon_dictionaries.xml`.
     * Set the status-bar icon at `iconResId` to the generate icon `@drawable/ic_status_kl`
     * Update the texts (name and description).
+1. Edit the following files replacing all occurrences of `english` with `klingon`:
+    * `addons/languages/esperanto/apk/build.gradle`
+    * `addons/languages/esperanto/apk/src/main/AndroidManifest.xml` 
+    * `addons/languages/esperanto/apk/src/main/res/values/strings.xml`
 
 At this point, you should be able to build an APK that can be installed on your device:
 ```
 ./gradlew :addons:languages:klingon:apk:assembleDebug
+
 ```
-or directly install it on your connected device:
+or directly install it on your connected device after making sure `adb --devices` lists your device ID, then run::
 ```
 ./gradlew :addons:languages:klingon:apk:installDebug
 ```
