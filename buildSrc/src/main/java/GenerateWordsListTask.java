@@ -133,5 +133,5 @@ public class GenerateWordsListTask extends DefaultTask {
     private char[] additionalInnerCharacters = "'".toCharArray();
     private Locale locale = Locale.US;
     private int maxWordsInList = Integer.MAX_VALUE;
-    private int maxWordFrequency = 64;
+    private int maxWordFrequency = 215;
 }
