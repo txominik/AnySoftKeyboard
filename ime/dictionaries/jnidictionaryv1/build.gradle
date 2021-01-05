@@ -8,6 +8,7 @@ android {
             path 'Android.mk'
         }
     }
+    ndkVersion '22.0.7026061'
 }
 
 dependencies {
