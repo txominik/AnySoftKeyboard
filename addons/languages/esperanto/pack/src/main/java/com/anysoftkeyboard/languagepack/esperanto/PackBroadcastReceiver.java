@@ -1,4 +1,4 @@
-package com.anysoftkeyboard.languagepack.english;
+package com.anysoftkeyboard.languagepack.esperanto;
 
 import com.anysoftkeyboard.addon.PackBroadcastReceiverBase;
 

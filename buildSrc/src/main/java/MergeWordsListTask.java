@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Collections;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -48,7 +51,9 @@ public class MergeWordsListTask extends DefaultTask {
                         + " words.");
         final HashMap<String, WordWithCount> allWords = new HashMap<>();
 
-        for (File inputFile : inputWordsListFiles) {
+        List<File> inputWordsListFilesL = Arrays.asList(inputWordsListFiles);
+        Collections.sort(inputWordsListFilesL);
+        for (File inputFile : inputWordsListFilesL) {
             System.out.println("Reading " + inputFile.getName() + "...");
             if (!inputFile.exists()) throw new FileNotFoundException(inputFile.getAbsolutePath());
             SAXParserFactory parserFactor = SAXParserFactory.newInstance();
@@ -59,8 +64,8 @@ public class MergeWordsListTask extends DefaultTask {
             parser.parse(inputSource, new MySaxHandler(allWords));
             System.out.println("Loaded " + allWords.size() + " words in total...");
             inputStream.close();
+            System.out.println("Closed " + inputFile.getName());
         }
-
         // discarding unwanted words
         if (wordsToDiscard.length > 0) {
             System.out.print("Discarding words...");
@@ -78,7 +83,7 @@ public class MergeWordsListTask extends DefaultTask {
                     .forEach(
                             word ->
                                     WordListWriter.writeWordWithRuntimeException(
-                                            writer, word.getWord(), word.getFreq()));
+                                            writer, word.getWord(), word.getFreq(), word.getFreqAbs()));
             System.out.println("Done.");
         }
     }
@@ -131,6 +136,7 @@ public class MergeWordsListTask extends DefaultTask {
         private boolean inWord;
         private StringBuilder word = new StringBuilder();
         private int freq;
+        private long freqabs;
 
         public MySaxHandler(HashMap<String, WordWithCount> allWords) {
             this.allWords = allWords;
@@ -143,6 +149,7 @@ public class MergeWordsListTask extends DefaultTask {
             if (qName.equals("w")) {
                 inWord = true;
                 freq = Integer.parseInt(attributes.getValue("f"));
+                freqabs = Long.parseLong(attributes.getValue("abs"));
                 word.setLength(0);
             } else {
                 inWord = false;
@@ -193,7 +200,7 @@ public class MergeWordsListTask extends DefaultTask {
         public void endElement(String uri, String localName, String qName) throws SAXException {
             super.endElement(uri, localName, qName);
             if (qName.equals("w") && inWord) {
-                WordWithCount wordWithCount = new WordWithCount(word.toString(), freq);
+                WordWithCount wordWithCount = new WordWithCount(word.toString(), freq, freqabs);
                 if (allWords.containsKey(wordWithCount.getKey())) {
                     allWords.get(wordWithCount.getKey()).addOtherWord(wordWithCount);
                 } else {

@@ -47,12 +47,28 @@ class MakeBinaryDictionary {
     private int mWordCount;
     private byte[] dict;
     private int dictSize;
+    private int dictMaxSize = 32 * 1024 * 1024;
     private int nullChildrenCount = 0;
     private int notTerminalCount = 0;
+
+    public class MaxSizeReachedException extends Exception { }
 
     public MakeBinaryDictionary(String srcFilename, String destFilename) {
         this.srcFilename = srcFilename;
         this.destFilename = destFilename;
+    }
+
+    /* for debugging purposes only */
+    private void enumerateNodes(List<CharNode> startnodes) {
+        if (startnodes == null) {
+            System.out.print("");
+            return;
+        }
+        for (CharNode n: startnodes) {
+            System.out.print("[ " + n.data + " [ ");
+            enumerateNodes(n.children);
+            System.out.print(" ] ] ");
+        }
     }
 
     public void makeDictionary() throws ParserConfigurationException, SAXException, IOException {
@@ -163,17 +179,20 @@ class MakeBinaryDictionary {
         }
     }
 
-    private void addCount(int count) {
+    private void addCount(int count) throws MaxSizeReachedException {
+        if (dictSize >= dictMaxSize) throw new MaxSizeReachedException();
         dict[dictSize++] = (byte) (0xFF & count);
     }
 
-    private void addNode(CharNode node) {
+    private void addNode(CharNode node) throws MaxSizeReachedException {
         int charData = 0xFFFF & node.data;
         if (charData > 254) {
+            if (dictSize >= dictMaxSize-2) throw new MaxSizeReachedException();
             dict[dictSize++] = (byte) 255;
             dict[dictSize++] = (byte) ((node.data >> 8) & 0xFF);
             dict[dictSize++] = (byte) (node.data & 0xFF);
         } else {
+            if (dictSize >= dictMaxSize) throw new MaxSizeReachedException();
             dict[dictSize++] = (byte) (0xFF & node.data);
         }
         if (node.children != null) {
@@ -186,11 +205,12 @@ class MakeBinaryDictionary {
         }
         if (node.terminal) {
             byte freq = (byte) (0xFF & node.freq);
+            if (dictSize >= dictMaxSize) throw new MaxSizeReachedException();
             dict[dictSize++] = freq;
         }
     }
 
-    private void updateNodeAddress(int nodeAddress, CharNode node, int childrenAddress) {
+    private void updateNodeAddress(int nodeAddress, CharNode node, int childrenAddress) throws MaxSizeReachedException {
         if ((dict[nodeAddress] & 0xFF) == 0xFF) { // 3 byte character
             nodeAddress += 2;
         }
@@ -205,22 +225,26 @@ class MakeBinaryDictionary {
         } else {
             notTerminalCount++;
         }
+        if (nodeAddress >= dictMaxSize-1) throw new MaxSizeReachedException();
         dict[nodeAddress + 1] = (byte) (childrenAddress >> 16);
         if ((childrenAddress & FLAG_ADDRESS_MASK) != 0) {
+            if (nodeAddress >= dictMaxSize-3) throw new MaxSizeReachedException();
             dict[nodeAddress + 2] = (byte) ((childrenAddress & 0xFF00) >> 8);
             dict[nodeAddress + 3] = (byte) ((childrenAddress & 0xFF));
         }
     }
 
-    void writeWordsRec(List<CharNode> children) {
+    void writeWordsRec(List<CharNode> children) throws MaxSizeReachedException {
         if (children == null || children.size() == 0) {
             return;
         }
         final int childCount = children.size();
+        //System.out.println("DOS: MakeBinaryDictionary: writeWordsRec(): childCount=" + childCount);
         addCount(childCount);
         // int childrenStart = dictSize;
         int[] childrenAddresses = new int[childCount];
         for (int j = 0; j < childCount; j++) {
+            // System.out.println("DOS: MakeBinaryDictionary: writeWordsRec(): childCount=" + childCount);
             CharNode node = children.get(j);
             childrenAddresses[j] = dictSize;
             addNode(node);
@@ -229,6 +253,7 @@ class MakeBinaryDictionary {
             CharNode node = children.get(j);
             int nodeAddress = childrenAddresses[j];
             int cacheDictSize = dictSize;
+            //System.out.println("DOS: MakeBinaryDictionary: calling writeWordsRec() recursively: childCount=" + childCount);
             writeWordsRec(node.children);
             updateNodeAddress(nodeAddress, node, node.children != null ? cacheDictSize : 0);
         }
@@ -236,9 +261,20 @@ class MakeBinaryDictionary {
 
     private void writeToDict(String dictFilename) throws IOException {
         // 4MB max, 22-bit offsets
-        dict = new byte[4 * 1024 * 1024];
+        // DOS: Where does the 22 bit offset show?!
+        dict = new byte[dictMaxSize];
         dictSize = 0;
-        writeWordsRec(roots);
+        /* System.out.println("DOS: MakeBinaryDictionary: writeToDict(): dictFilename=" + dictFilename);
+        System.out.println("DOS: MakeBinaryDictionary: writeToDict(): calling writeWordsRec() with argument roots, size=" + roots.size()); */
+        try {
+            writeWordsRec(roots);
+        }
+        catch (MaxSizeReachedException e) {
+            System.out.println("############################################################################");
+            System.out.println("# WARNING: Could not write all the words due to a MaxSizeReachedException! #");
+            System.out.println("############################################################################");
+        }
+        // System.out.println("DOS: MakeBinaryDictionary: writeToDict(): done with writeWordsRec()");
         System.out.println("Dict Size = " + dictSize);
         try (FileOutputStream fos = new FileOutputStream(dictFilename)) {
             fos.write(dict, 0, dictSize);
