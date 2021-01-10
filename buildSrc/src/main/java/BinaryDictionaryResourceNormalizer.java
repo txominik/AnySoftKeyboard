@@ -40,6 +40,7 @@ class BinaryDictionaryResourceNormalizer {
             throws IOException {
         // output should be words_1.dict....words_n.dict
         InputStream inputStream = new FileInputStream(tempOutputFile);
+        System.out.println("DOS: BinaryDictionaryResourceNormalizer: splitOutputFile: Reading from " + tempOutputFile.getAbsolutePath());
         int file_postfix = 0;
         int current_output_file_size = 0;
         byte[] buffer = new byte[4 * 1024];
